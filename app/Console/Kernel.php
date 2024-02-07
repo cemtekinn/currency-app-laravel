@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('currency:update')->daily();
     }
-
+        
     /**
      * Register the commands for the application.
      */

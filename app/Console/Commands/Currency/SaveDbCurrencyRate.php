@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Currency;
 
-use App\Models\CurrencyRate;
+use App\Models\Currency;
 use Illuminate\Console\Command;
 use App\Services\CurrencyService;
 
@@ -17,15 +17,25 @@ class SaveDbCurrencyRate extends Command
         $currencyService = new CurrencyService();
         $currencyData = $currencyService->getCurrencyData();
 
-        CurrencyRate::where('name', 'usd')->update([
-            'selling_rate' => $currencyData['usdSellingRate'],
-            'buying_rate' => $currencyData['usdBuyingRate']
-        ]);
-    
-        CurrencyRate::where('name', 'euro')->update([
-            'selling_rate' => $currencyData['euroSellingRate'],
-            'buying_rate' => $currencyData['euroBuyingRate']
-        ]);
+        $today = date('Y-m-d');
+        Currency::updateOrCreate(
+            ['name' => 'usd', 'date' => $today],
+            [ 
+                'selling_rate' => $currencyData['usdSellingRate'],
+                'buying_rate' => $currencyData['usdBuyingRate'],
+                'date' => $today
+            ]
+        );
+
+        Currency::updateOrCreate(
+            ['name' => 'euro', 'date' => $today], 
+            [ 
+                'selling_rate' => $currencyData['euroSellingRate'],
+                'buying_rate' => $currencyData['euroBuyingRate'],
+                'date' => $today
+            ]
+        );
+
         $this->info('Döviz kurları başarıyla güncellendi.');
     }
 }

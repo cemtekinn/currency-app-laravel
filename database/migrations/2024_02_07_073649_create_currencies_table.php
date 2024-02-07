@@ -21,7 +21,7 @@ return new class extends Migration
             $table->collation="utf8_general_ci";
         });
     }
-
+    
     public function down(): void
     {
         Schema::dropIfExists('currencies');
